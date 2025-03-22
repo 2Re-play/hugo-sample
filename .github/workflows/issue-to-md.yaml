@@ -78,9 +78,7 @@ jobs:
             echo "$COMMENTS" | jq -r '.[] | 
               "{{% notice style=\"green\" title=\"코멘트\" %}}\n
               🗣 작성자 : \(.user.login)\n
-              ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
-              \(.body | gsub("```"; "```"))\n
-              {{% /notice %}}"' >> "$FILE_PATH"
+              ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n\(.body | gsub("```"; "```"))\n{{% /notice %}}"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
