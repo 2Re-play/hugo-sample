@@ -1,0 +1,4 @@
+baseURL = 'https://example.org/'
+languageCode = 'ko-KR'
+title = 'hugo sample site'
+theme = 'relearn'
