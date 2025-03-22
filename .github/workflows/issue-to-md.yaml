@@ -77,8 +77,9 @@ jobs:
             echo "## 코멘트" >> "$FILE_PATH"
             echo "" >> "$FILE_PATH"
 
-            # 코멘트 내용 추가
-            echo "$COMMENTS" | jq -r '.[] | "### \(.user.login) (\(.created_at))\n\(.body)\n"' >> "$FILE_PATH"
+            # 댓글 내용 추가 (작성자와 작성일 포함, 날짜 포맷 변경)
+            echo "$COMMENTS" | jq -r '.[] | 
+              "#### 작성자 : \(.user.login)\n#### 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n\(.body)\n---"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
