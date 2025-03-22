@@ -22,7 +22,7 @@ categories: ['posts']
 
 ⏰ 작성일 : 2025-03-22 15:37:17
 
-    ```java
+```java
 public class BootSpringBootApplication {
   public static void main(String[] args) {
     System.out.println("Hello world");
@@ -30,7 +30,7 @@ public class BootSpringBootApplication {
 }
 ```
 
-    {{% /notice %}}
+{{% /notice %}}
 {{% notice style="green" title="코멘트" %}}
 
 🗣 작성자 : 2Re-play
@@ -50,22 +50,22 @@ public class BootSpringBootApplication {
 
 ⏰ 작성일 : 2025-03-22 15:48:54
 
-    테스트
+테스트
 
-    {{% /notice %}}
+{{% /notice %}}
 {{% notice style="green" title="코멘트" %}}
 
 🗣 작성자 : 2Re-play
 
 ⏰ 작성일 : 2025-03-22 15:59:21
 
-    테스트2-122
+테스트2-122
 
 123
-여러줄줄주룾ㄹ
+여러줄줄주룾ㄹdd
 줒룾22
 ㅈ루줄
 12322
 
 
-    {{% /notice %}}
+{{% /notice %}}
