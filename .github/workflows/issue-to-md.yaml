@@ -82,7 +82,7 @@ jobs:
               "{{% notice style=\"green\" title=\"코멘트\" %}}\n
           🗣 작성자 : \(.user.login)\n
           ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
-          \(.body | gsub("```"; "```") | gsub("\n"; "\n\n") | gsub("(^|\n)[ ]{4,}(?=\S)"; "\n\n"))\n{{% /notice %}}"' >> "$FILE_PATH"
+          \(.body | gsub("```"; "```") | gsub("\n"; "\n\n") | gsub("(^|\n)[ ]{4,}(?=\S)"; "\n\n") | gsub("\n\n+"; "\n\n"))\n{{% /notice %}}"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
