@@ -67,8 +67,8 @@ jobs:
           echo "---" >> "$FILE_PATH"
           echo "" >> "$FILE_PATH"
           
-          # 본문에 개행 추가
-          BODY=$(echo "${{ github.event.issue.body }}" | sed 's/$/\n/')
+          # 본문에 개행 추가, 표나 코드 블록은 제외
+          BODY=$(echo "${{ github.event.issue.body }}" | sed ':a;N;$!ba;s/\n\([^|`\n]\)/\n\n\1/g')
           echo "$BODY" >> "$FILE_PATH"
 
           echo "" >> "$FILE_PATH"
@@ -82,7 +82,7 @@ jobs:
               "{{% notice style=\"green\" title=\"코멘트\" %}}\n
           🗣 작성자 : \(.user.login)\n
           ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
-          \(.body | gsub("```"; "```") | gsub("\n"; "\n\n"))\n{{% /notice %}}"' >> "$FILE_PATH"
+          \(.body | gsub("```"; "```") | gsub("\n"; "\n\n") | gsub("(^|\n)[ ]{4,}(?=\S)"; "\n\n"))\n{{% /notice %}}"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
