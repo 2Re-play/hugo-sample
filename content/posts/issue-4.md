@@ -37,13 +37,13 @@ public class BootSpringBootApplication {
 
 ⏰ 작성일 : 2025-03-22 15:42:25
 
-    |제목|내용|설명|
+|제목|내용|설명|
 |------|---|---|
 |테스트1|테스트2|테스트3|
 |테스트1|테스트2|테스트3|
 |테스트1|테스트2|테스트3|
 
-    {{% /notice %}}
+{{% /notice %}}
 {{% notice style="green" title="코멘트" %}}
 
 🗣 작성자 : 2Re-play
