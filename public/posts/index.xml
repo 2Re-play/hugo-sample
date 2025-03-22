@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts :: hugo sample site</title>
+    <link>http://localhost:1313/posts/index.html</link>
+    <description></description>
+    <generator>Hugo</generator>
+    <language>ko-KR</language>
+    <lastBuildDate>Sat, 22 Mar 2025 15:33:43 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>링크 테스트</title>
+      <link>http://localhost:1313/posts/issue-4/index.html</link>
+      <pubDate>Sat, 22 Mar 2025 15:33:43 +0000</pubDate>
+      <guid>http://localhost:1313/posts/issue-4/index.html</guid>
+      <description>naver&#xA;test test 코멘트 🗣 작성자 : 2Re-play&#xA;⏰ 작성일 : 2025-03-22 15:37:17&#xA;public class BootSpringBootApplication { public static void main(String[] args) { System.out.println(&#34;Hello world&#34;); } } 코멘트 🗣 작성자 : 2Re-play&#xA;⏰ 작성일 : 2025-03-22 15:42:25&#xA;제목 내용 설명 테스트1 테스트2 테스트3 테스트1 테스트2 테스트3 테스트1 테스트2 테스트3 코멘트 🗣 작성자 : 2Re-play&#xA;⏰ 작성일 : 2025-03-22 15:48:54 테스트</description>
+    </item>
+    <item>
+      <title>두번째 문서입니다.</title>
+      <link>http://localhost:1313/posts/issue-3/index.html</link>
+      <pubDate>Sat, 22 Mar 2025 15:24:17 +0000</pubDate>
+      <guid>http://localhost:1313/posts/issue-3/index.html</guid>
+      <description>두번째 문서입니다. 이미지 이번에 이미지를 넣어봤어요.</description>
+    </item>
+  </channel>
+</rss>

@@ -6,6 +6,21 @@
     <description></description>
     <generator>Hugo</generator>
     <language>ko-KR</language>
+    <lastBuildDate>Sat, 22 Mar 2025 15:33:43 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Category :: Posts</title>
+      <link>http://localhost:1313/categories/posts/index.html</link>
+      <pubDate>Sat, 22 Mar 2025 15:33:43 +0000</pubDate>
+      <guid>http://localhost:1313/categories/posts/index.html</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Category :: Network/Http</title>
+      <link>http://localhost:1313/categories/network/http/index.html</link>
+      <pubDate>Sat, 22 Mar 2025 15:15:10 +0000</pubDate>
+      <guid>http://localhost:1313/categories/network/http/index.html</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

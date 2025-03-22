@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Networks :: hugo sample site</title>
+    <link>http://localhost:1313/network/index.html</link>
+    <description></description>
+    <generator>Hugo</generator>
+    <language>ko-KR</language>
+    <lastBuildDate>Sat, 22 Mar 2025 15:15:10 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/network/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>첫번째 문서입니다.</title>
+      <link>http://localhost:1313/network/http/issue-2/index.html</link>
+      <pubDate>Sat, 22 Mar 2025 15:15:10 +0000</pubDate>
+      <guid>http://localhost:1313/network/http/issue-2/index.html</guid>
+      <description>테스트를 해봤습니다. 잘 될까요?&#xA;이슈 생성시 docs 라벨을 붙여야합니다.</description>
+    </item>
+  </channel>
+</rss>
