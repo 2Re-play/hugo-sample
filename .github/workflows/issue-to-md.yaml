@@ -79,7 +79,7 @@ jobs:
 
             # 댓글 내용 추가 (작성자와 작성일 포함, 날짜 포맷 변경)
             echo "$COMMENTS" | jq -r '.[] | 
-              "> [!INFO] \n > #### 🗣 작성자 : \(.user.login)\n > #### ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n > \(.body)\n"' >> "$FILE_PATH"
+              "> [!INFO] \n > 🗣 작성자 : \(.user.login)\n > ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n > \(.body)\n"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
