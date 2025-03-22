@@ -2,7 +2,9 @@ name: Issue to Markdown
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
+  issue_comment:
+    types: [ created, edited, deleted ]  # 추가: 이슈에 코멘트가 달린 경우
 
 permissions:
   contents: write  # 레포지토리에 푸시할 수 있도록 권한 추가
