@@ -69,6 +69,10 @@ jobs:
           
           # 본문에 개행 추가, 표나 코드 블록은 제외
           BODY=$(echo "${{ github.event.issue.body }}" | sed ':a;N;$!ba;s/\n\([^|`\n]\)/\n\n\1/g')
+
+          # 표나 코드블록이 없으면 개행 추가, 있으면 그대로
+          BODY=$(echo "$BODY" | jq -R 'if test("```") or test("\\|") then . else gsub("\n"; "\n\n") end')
+
           echo "$BODY" >> "$FILE_PATH"
 
           echo "" >> "$FILE_PATH"
@@ -82,7 +86,15 @@ jobs:
               "{{% notice style=\"green\" title=\"코멘트\" %}}\n
           🗣 작성자 : \(.user.login)\n
           ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
-          \(.body | gsub("```"; "```"))\n
+          \(.body | 
+            # 표나 코드블록이 있는지 확인하고, 있으면 개행을 하지 않음
+            (test("```") or test("\\|")) | 
+            if . then 
+              . 
+            else 
+              gsub("\n"; "\n\n")
+            end
+          )\n
           {{% /notice %}}"' >> "$FILE_PATH"
           fi
 
