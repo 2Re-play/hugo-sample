@@ -1,0 +1,81 @@
+name: Issue to Markdown
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  generate-markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 레포지토리 체크아웃
+        uses: actions/checkout@v4
+
+      - name: docs 라벨이 있는지 확인
+        id: label-check
+        run: |
+          echo "LABEL_FOUND=false" >> $GITHUB_ENV
+          echo "CATEGORY_PATH=" >> $GITHUB_ENV
+
+          labels=$(echo '${{ toJson(github.event.issue.labels) }}' | jq -r '.[].name')
+
+          for label in $labels; do
+            if [[ "$label" == "docs" ]]; then
+              echo "LABEL_FOUND=true" >> $GITHUB_ENV
+            elif [[ "$label" == */* ]]; then
+              echo "CATEGORY_PATH=$label" >> $GITHUB_ENV
+              break
+            fi
+          done
+
+      - name: docs 라벨이 없으면 종료
+        if: env.LABEL_FOUND != 'true'
+        run: |
+          echo "docs 라벨이 없으므로 변환을 종료합니다."
+          exit 0
+
+      - name: 경로가 없으면 기본 경로 posts 사용
+        run: |
+          if [[ -z "$CATEGORY_PATH" ]]; then
+            echo "CATEGORY_PATH=posts" >> $GITHUB_ENV
+          fi
+
+      - name: 이슈 및 댓글을 Markdown 파일로 저장
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DIR_PATH="content/${CATEGORY_PATH}"
+          mkdir -p "$DIR_PATH"
+          FILE_PATH="$DIR_PATH/issue-${{ github.event.issue.number }}.md"
+
+          echo "---" >> "$FILE_PATH"
+          echo "title: '${{ github.event.issue.title }}'" >> "$FILE_PATH"
+          echo "date: '${{ github.event.issue.created_at }}'" >> "$FILE_PATH"
+          echo "issue_number: ${{ github.event.issue.number }}" >> "$FILE_PATH"
+          echo "author: '${{ github.event.issue.user.login }}'" >> "$FILE_PATH"
+          echo "categories: ['${CATEGORY_PATH}']" >> "$FILE_PATH"
+          echo "---" >> "$FILE_PATH"
+          echo "" >> "$FILE_PATH"
+          echo "${{ github.event.issue.body }}" >> "$FILE_PATH"
+
+          echo "" >> "$FILE_PATH"
+
+          COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments)
+
+          if [ "$(echo "$COMMENTS" | jq length)" -gt 0 ]; then
+            echo "## 코멘트" >> "$FILE_PATH"
+            echo "" >> "$FILE_PATH"
+
+            echo "$COMMENTS" | jq -r '.[] | "### \(.user.login) (\(.created_at))\n\(.body)\n"' >> "$FILE_PATH"
+          fi
+
+      - name: Git 설정
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: 변경 사항 커밋 및 푸시
+        run: |
+          git add content/
+          git commit -m "📝 Issue #${{ github.event.issue.number }} → Markdown 저장 (코멘트 포함)"
+          git push
