@@ -74,15 +74,13 @@ jobs:
           COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments)
 
           if [ "$(echo "$COMMENTS" | jq length)" -gt 0 ]; then
-            # 코멘트 섹션을 {{% notice %}}로 감싸기
-            echo "{{% notice style=\"green\" title=\"코멘트\" %}}" >> "$FILE_PATH"
-            echo "" >> "$FILE_PATH"
-
-            # 댓글 내용 추가 (작성자와 작성일 포함, 날짜 포맷 변경)
+            # 각 코멘트마다 {{% notice %}}로 감싸기
             echo "$COMMENTS" | jq -r '.[] | 
-              "🗣 작성자 : \(.user.login)\n⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n\(.body)\n"' >> "$FILE_PATH"
-
-            echo "{{% /notice %}}" >> "$FILE_PATH"
+              "{{% notice style=\"green\" title=\"코멘트\" %}}\n
+              🗣 작성자 : \(.user.login)\n
+              ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
+              \(.body)\n
+              {{% /notice %}}"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
