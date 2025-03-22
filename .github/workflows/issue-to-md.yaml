@@ -4,7 +4,7 @@ on:
   issues:
     types: [opened, edited]
   issue_comment:
-    types: [ created, edited, deleted ]  # 추가: 이슈에 코멘트가 달린 경우
+    types: [created, edited, deleted]  # 코멘트 생성, 수정, 삭제 시 트리거
 
 permissions:
   contents: write  # 레포지토리에 푸시할 수 있도록 권한 추가
@@ -55,6 +55,9 @@ jobs:
           mkdir -p "$DIR_PATH"
           FILE_PATH="$DIR_PATH/issue-${{ github.event.issue.number }}.md"
 
+          # 기존 파일 삭제 (새로운 내용으로 덮어쓰기)
+          rm -f "$FILE_PATH"
+
           echo "---" >> "$FILE_PATH"
           echo "title: '${{ github.event.issue.title }}'" >> "$FILE_PATH"
           echo "date: '${{ github.event.issue.created_at }}'" >> "$FILE_PATH"
@@ -67,12 +70,14 @@ jobs:
 
           echo "" >> "$FILE_PATH"
 
+          # 댓글을 가져와서 추가
           COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments)
 
           if [ "$(echo "$COMMENTS" | jq length)" -gt 0 ]; then
             echo "## 코멘트" >> "$FILE_PATH"
             echo "" >> "$FILE_PATH"
 
+            # 코멘트 내용 추가
             echo "$COMMENTS" | jq -r '.[] | "### \(.user.login) (\(.created_at))\n\(.body)\n"' >> "$FILE_PATH"
           fi
 
