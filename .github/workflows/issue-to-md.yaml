@@ -66,7 +66,10 @@ jobs:
           echo "categories: ['${CATEGORY_PATH}']" >> "$FILE_PATH"
           echo "---" >> "$FILE_PATH"
           echo "" >> "$FILE_PATH"
-          echo "${{ github.event.issue.body }}" >> "$FILE_PATH"
+          
+          # 본문에 개행 추가
+          BODY=$(echo "${{ github.event.issue.body }}" | sed 's/$/\n/')
+          echo "$BODY" >> "$FILE_PATH"
 
           echo "" >> "$FILE_PATH"
 
@@ -79,7 +82,7 @@ jobs:
               "{{% notice style=\"green\" title=\"코멘트\" %}}\n
           🗣 작성자 : \(.user.login)\n
           ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
-          \(.body | gsub("```"; "```"))\n{{% /notice %}}"' >> "$FILE_PATH"
+          \(.body | gsub("```"; "```") | gsub("\n"; "\n\n"))\n{{% /notice %}}"' >> "$FILE_PATH"
           fi
 
       - name: Git 설정
