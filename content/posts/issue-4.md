@@ -8,6 +8,8 @@ categories: ['posts']
 
 [naver](https://www.naver.com)
 
+![image](https://github.com/user-attachments/assets/1301bc2a-771b-49d3-9f8e-3b04c50c4259)
+
 안녕
 
 안녕

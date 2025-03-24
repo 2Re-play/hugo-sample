@@ -66,38 +66,38 @@ jobs:
           echo "categories: ['${CATEGORY_PATH}']" >> "$FILE_PATH"
           echo "---" >> "$FILE_PATH"
           echo "" >> "$FILE_PATH"
-          
-          # 본문에 개행 추가, 표나 코드 블록은 제외
-          BODY=$(echo "${{ github.event.issue.body }}" | sed ':a;N;$!ba;s/\n\([^|`\n]\)/\n\n\1/g')
 
-          # 코드블록이나 표가 포함된 경우에는 텍스트로 안전하게 처리하도록 변경
-          BODY=$(echo "$BODY" | sed 's/```/\\\`\`\`/g')  # 코드블록 이스케이프 처리
-          BODY=$(echo "$BODY" | sed 's/|/\\|/g')  # 표의 파이프 문자 이스케이프 처리
+          # 본문 처리: 코드블록/표 이스케이프 + 개행
+          ISSUE_BODY=$(echo "${{ github.event.issue.body }}" | \
+            sed 's/```/\\`\\`\\`/g' | \
+            sed 's/|/\\|/g' | \
+            sed ':a;N;$!ba;s/\n/\\n/g')
 
-          # 표나 코드블록이 없으면 개행 추가, 있으면 그대로
-          BODY=$(echo "$BODY" | jq -R 'if test("```") or test("\\|") then . else gsub("\n"; "\n\n") end')
-
-          echo "$BODY" >> "$FILE_PATH"
+          echo "$ISSUE_BODY" | sed 's/\\n/\n\n/g' >> "$FILE_PATH"
 
           echo "" >> "$FILE_PATH"
 
-          # 댓글을 가져와서 추가
+          # 댓글 가져오기
           COMMENTS=$(gh api repos/${{ github.repository }}/issues/${{ github.event.issue.number }}/comments)
 
           if [ "$(echo "$COMMENTS" | jq length)" -gt 0 ]; then
-            # 각 코멘트마다 {{% notice %}}로 감싸기
-            echo "$COMMENTS" | jq -r '.[] | 
-              "{{% notice style=\"green\" title=\"코멘트\" %}}\n
-          🗣 작성자 : \(.user.login)\n
-          ⏰ 작성일 : \(.created_at | sub("T"; " ") | sub("Z"; ""))\n
-          \(.body | 
-            # 코멘트 내 코드블록이나 표가 포함된 경우 텍스트로 처리
-            gsub("```"; "\\\`\`\`") |
-            gsub("\|"; "\\|") |
-            # 코드블록이나 표가 없는 경우에만 개행 추가
-            if test("```") or test("\\|") then . else gsub("\n"; "\n\n") end
-          )\n
-          {{% /notice %}}"' >> "$FILE_PATH"
+            echo "$COMMENTS" | jq -c '.[]' | while read -r comment; do
+              AUTHOR=$(echo "$comment" | jq -r '.user.login')
+              CREATED=$(echo "$comment" | jq -r '.created_at' | sed 's/T/ /; s/Z//')
+              BODY=$(echo "$comment" | jq -r '.body' | \
+                sed 's/```/\\`\\`\\`/g' | \
+                sed 's/|/\\|/g' | \
+                sed ':a;N;$!ba;s/\n/\\n/g')
+
+              echo "" >> "$FILE_PATH"
+              echo "{{% notice style=\"green\" title=\"코멘트\" %}}" >> "$FILE_PATH"
+              echo "🗣 작성자 : $AUTHOR" >> "$FILE_PATH"
+              echo "🕒 작성일 : $CREATED" >> "$FILE_PATH"
+              echo "" >> "$FILE_PATH"
+              echo "$BODY" | sed 's/\\n/\n\n/g' >> "$FILE_PATH"
+              echo "{{% /notice %}}" >> "$FILE_PATH"
+              echo "" >> "$FILE_PATH"
+            done
           fi
 
       - name: Git 설정
@@ -108,5 +108,9 @@ jobs:
       - name: 변경 사항 커밋 및 푸시
         run: |
           git add content/
-          git commit -m "📝 Issue #${{ github.event.issue.number }} → Markdown 저장 (코멘트 포함)"
-          git push
+          if git diff --cached --quiet; then
+            echo "변경 사항이 없습니다."
+          else
+            git commit -m "📝 Issue #${{ github.event.issue.number }} → Markdown 저장 (본문 + 댓글)"
+            git push
+          fi
